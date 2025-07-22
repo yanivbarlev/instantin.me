@@ -29,9 +29,9 @@
 ## Tasks
 
 - [ ] 1.0 Project Setup and Core Infrastructure
-  - [ ] 1.1 Create `requirements.txt` with specific versions: FastAPI 0.104.1, SQLAlchemy 2.0.23, Alembic 1.12.1, Celery 5.3.4, Redis 5.0.1, Stripe 7.8.0, boto3 1.34.0, Jinja2 3.1.2, python-multipart 0.0.6, python-jose[cryptography] 3.3.0, passlib[bcrypt] 1.7.4, python-dotenv 1.0.0, httpx 0.25.2, Pillow 10.1.0, authlib 1.2.1, beautifulsoup4 4.12.2
-  - [ ] 1.2 Create `.env.example` file with all required environment variables: DATABASE_URL, REDIS_URL, STRIPE_SECRET_KEY, STRIPE_PUBLISHABLE_KEY, PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_S3_BUCKET, GROQ_API_KEY, UNSPLASH_API_KEY, SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES
-  - [ ] 1.3 Create `docker-compose.yml` with PostgreSQL 15, Redis 7, and app service configurations
+  - [x] 1.1 Create `requirements.txt` with specific versions: FastAPI 0.104.1, SQLAlchemy 2.0.23, Alembic 1.12.1, Celery 5.3.4, Redis 5.0.1, Stripe 7.8.0, boto3 1.34.0, Jinja2 3.1.2, python-multipart 0.0.6, python-jose[cryptography] 3.3.0, passlib[bcrypt] 1.7.4, python-dotenv 1.0.0, httpx 0.25.2, Pillow 10.1.0, authlib 1.2.1, beautifulsoup4 4.12.2
+  - [x] 1.2 Create `.env.example` file with all required environment variables: DATABASE_URL, REDIS_URL, STRIPE_SECRET_KEY, STRIPE_PUBLISHABLE_KEY, PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_S3_BUCKET, GROQ_API_KEY, UNSPLASH_API_KEY, SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES
+  - [x] 1.3 Create `docker-compose.yml` with PostgreSQL 15, Redis 7, and app service configurations
   - [ ] 1.4 Create `app/__init__.py` (empty file for Python package)
   - [ ] 1.5 Create `app/main.py` with FastAPI app initialization, CORS middleware, and basic health check endpoint
   - [ ] 1.6 Create `app/config.py` with Pydantic Settings class for environment variable management
