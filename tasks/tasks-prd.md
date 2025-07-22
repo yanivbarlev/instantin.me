@@ -33,7 +33,7 @@
   - [x] 1.2 Create `.env.example` file with all required environment variables: DATABASE_URL, REDIS_URL, STRIPE_SECRET_KEY, STRIPE_PUBLISHABLE_KEY, PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_S3_BUCKET, GROQ_API_KEY, UNSPLASH_API_KEY, SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES
   - [x] 1.3 Create `docker-compose.yml` with PostgreSQL 15, Redis 7, and app service configurations
   - [x] 1.4 Create `app/__init__.py` (empty file for Python package)
-  - [ ] 1.5 Create `app/main.py` with FastAPI app initialization, CORS middleware, and basic health check endpoint
+  - [x] 1.5 Create `app/main.py` with FastAPI app initialization, CORS middleware, and basic health check endpoint
   - [ ] 1.6 Create `app/config.py` with Pydantic Settings class for environment variable management
   - [ ] 1.7 Create `app/database.py` with SQLAlchemy engine, SessionLocal, and Base class setup
   - [ ] 1.8 Create `alembic.ini` configuration file for database migrations
