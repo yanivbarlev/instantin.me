@@ -34,7 +34,7 @@
   - [x] 1.3 Create `docker-compose.yml` with PostgreSQL 15, Redis 7, and app service configurations
   - [x] 1.4 Create `app/__init__.py` (empty file for Python package)
   - [x] 1.5 Create `app/main.py` with FastAPI app initialization, CORS middleware, and basic health check endpoint
-  - [ ] 1.6 Create `app/config.py` with Pydantic Settings class for environment variable management
+  - [x] 1.6 Create `app/config.py` with Pydantic Settings class for environment variable management
   - [ ] 1.7 Create `app/database.py` with SQLAlchemy engine, SessionLocal, and Base class setup
   - [ ] 1.8 Create `alembic.ini` configuration file for database migrations
   - [ ] 1.9 Initialize Alembic with `alembic init alembic` and configure `alembic/env.py` to use app models
