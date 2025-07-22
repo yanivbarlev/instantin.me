@@ -37,7 +37,7 @@
   - [x] 1.6 Create `app/config.py` with Pydantic Settings class for environment variable management
   - [x] 1.7 Create `app/database.py` with SQLAlchemy engine, SessionLocal, and Base class setup
   - [x] 1.8 Create `alembic.ini` configuration file for database migrations
-  - [ ] 1.9 Initialize Alembic with `alembic init alembic` and configure `alembic/env.py` to use app models
+  - [x] 1.9 Initialize Alembic with `alembic init alembic` and configure `alembic/env.py` to use app models
   - [ ] 1.10 Create `app/utils/__init__.py` and `app/utils/helpers.py` with common utility functions
 
 - [ ] 2.0 Authentication and User Management System
