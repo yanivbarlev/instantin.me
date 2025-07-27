@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    
+    <!-- SEO Meta Tags -->
+    <title>{% block title %}{{ storefront.name if storefront else 'InstantIn.me' }} - Link in Bio{% endblock %}</title>
+    <meta name="description" content="{% block meta_description %}{{ storefront.meta_description or storefront.bio or 'Create your professional link-in-bio page with InstantIn.me' }}{% endblock %}">
+    <meta name="keywords" content="{% block meta_keywords %}link in bio, social media, creator, business, portfolio{% endblock %}">
+    <meta name="author" content="{% block meta_author %}{{ storefront.name if storefront else 'InstantIn.me' }}{% endblock %}">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="{% block og_title %}{{ storefront.name if storefront else 'InstantIn.me' }}{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}{{ storefront.bio or 'Professional link-in-bio page' }}{% endblock %}">
+    <meta property="og:image" content="{% block og_image %}{{ storefront.cover_image_url or storefront.avatar_url or '/static/images/default-og.jpg' }}{% endblock %}">
+    <meta property="og:url" content="{% block og_url %}{{ request.url if request else '' }}{% endblock %}">
+    <meta property="og:type" content="profile">
+    <meta property="og:site_name" content="InstantIn.me">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{% block twitter_title %}{{ storefront.name if storefront else 'InstantIn.me' }}{% endblock %}">
+    <meta name="twitter:description" content="{% block twitter_description %}{{ storefront.bio or 'Professional link-in-bio page' }}{% endblock %}">
+    <meta name="twitter:image" content="{% block twitter_image %}{{ storefront.cover_image_url or storefront.avatar_url or '/static/images/default-og.jpg' }}{% endblock %}">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/favicon-16x16.png">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Tailwind CSS Configuration -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        // Dynamic theme colors from storefront
+                        'brand-primary': '{{ storefront.primary_color or "#3B82F6" }}',
+                        'brand-accent': '{{ storefront.accent_color or "#EF4444" }}',
+                        'brand-text': '{{ "#FFFFFF" if storefront.theme == "dark" else "#1F2937" }}',
+                        'brand-bg': '{{ "#1F2937" if storefront.theme == "dark" else "#FFFFFF" }}',
+                        'brand-surface': '{{ "#374151" if storefront.theme == "dark" else "#F9FAFB" }}'
+                    },
+                    fontFamily: {
+                        'brand': ['Inter', 'system-ui', 'sans-serif']
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.5s ease-in-out',
+                        'slide-up': 'slideUp 0.6s ease-out',
+                        'bounce-gentle': 'bounceGentle 2s infinite',
+                        'pulse-slow': 'pulse 3s infinite'
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' }
+                        },
+                        slideUp: {
+                            '0%': { transform: 'translateY(20px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' }
+                        },
+                        bounceGentle: {
+                            '0%, 20%, 50%, 80%, 100%': { transform: 'translateY(0)' },
+                            '40%': { transform: 'translateY(-5px)' },
+                            '60%': { transform: 'translateY(-3px)' }
+                        }
+                    }
+                }
+            },
+            darkMode: 'class'
+        }
+    </script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/static/css/styles.css">
+    
+    <!-- Custom Storefront CSS -->
+    {% if storefront and storefront.custom_css %}
+    <style type="text/css">
+        {{ storefront.custom_css | safe }}
+    </style>
+    {% endif %}
+    
+    <!-- Additional Head Content -->
+    {% block extra_head %}{% endblock %}
+    
+    <!-- Analytics and Tracking -->
+    {% if storefront and storefront.enable_analytics %}
+    <!-- Google Analytics placeholder -->
+    <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script> -->
+    <script>
+        // Analytics tracking will be implemented here
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        // gtag('config', 'GA_MEASUREMENT_ID');
+    </script>
+    {% endif %}
+</head>
+
+<body class="{% if storefront.theme == 'dark' %}dark bg-gray-900 text-white{% else %}bg-gray-50 text-gray-900{% endif %} font-brand min-h-full">
+    <!-- Background Pattern -->
+    <div class="fixed inset-0 -z-10 overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-br from-brand-primary/5 via-transparent to-brand-accent/5"></div>
+        <div class="absolute top-0 left-0 w-full h-full opacity-30">
+            <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-brand-primary/10 rounded-full blur-3xl animate-pulse-slow"></div>
+            <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-brand-accent/10 rounded-full blur-3xl animate-pulse-slow" style="animation-delay: 1s;"></div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="fixed inset-0 bg-brand-bg/80 backdrop-blur-sm z-50 flex items-center justify-center hidden">
+        <div class="text-center">
+            <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-brand-primary"></div>
+            <p class="mt-4 text-brand-text/70">Loading...</p>
+        </div>
+    </div>
+
+    <!-- Skip to Content (Accessibility) -->
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-brand-primary text-white px-4 py-2 rounded-md z-50">
+        Skip to main content
+    </a>
+
+    <!-- Header -->
+    <header class="{% block header_class %}relative{% endblock %}">
+        {% block header %}
+        <!-- Default header - can be overridden in child templates -->
+        {% if storefront %}
+        <div class="relative bg-brand-surface/50 backdrop-blur-sm border-b border-brand-text/10">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+                <div class="flex items-center justify-between">
+                    <!-- Logo/Brand -->
+                    <div class="flex items-center space-x-3">
+                        {% if storefront.logo_url %}
+                        <img src="{{ storefront.logo_url }}" alt="{{ storefront.name }} logo" class="h-8 w-8 object-cover rounded-full">
+                        {% elif storefront.avatar_url %}
+                        <img src="{{ storefront.avatar_url }}" alt="{{ storefront.name }}" class="h-8 w-8 object-cover rounded-full">
+                        {% else %}
+                        <div class="h-8 w-8 bg-brand-primary rounded-full flex items-center justify-center">
+                            <span class="text-white font-semibold text-sm">{{ storefront.name[0].upper() }}</span>
+                        </div>
+                        {% endif %}
+                        <span class="font-semibold text-brand-text">{{ storefront.name }}</span>
+                    </div>
+                    
+                    <!-- Navigation/Actions -->
+                    <div class="flex items-center space-x-2">
+                        {% if storefront.website_url %}
+                        <a href="{{ storefront.website_url }}" target="_blank" rel="noopener noreferrer" 
+                           class="text-brand-text/70 hover:text-brand-primary transition-colors">
+                            <i class="fas fa-external-link-alt"></i>
+                        </a>
+                        {% endif %}
+                        <button id="share-button" class="text-brand-text/70 hover:text-brand-primary transition-colors">
+                            <i class="fas fa-share"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        {% endblock %}
+    </header>
+
+    <!-- Main Content -->
+    <main id="main-content" class="{% block main_class %}relative{% endblock %}">
+        {% block content %}
+        <!-- Main content goes here -->
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="text-center">
+                <h1 class="text-3xl font-bold text-brand-text mb-4">Welcome to InstantIn.me</h1>
+                <p class="text-brand-text/70">Create your professional link-in-bio page</p>
+            </div>
+        </div>
+        {% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="{% block footer_class %}relative mt-auto{% endblock %}">
+        {% block footer %}
+        <div class="bg-brand-surface/30 border-t border-brand-text/10">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+                <div class="text-center">
+                    {% if storefront %}
+                    <!-- Storefront Footer -->
+                    <div class="flex flex-wrap justify-center items-center gap-4 mb-4">
+                        {% if storefront.instagram_url %}
+                        <a href="{{ storefront.instagram_url }}" target="_blank" rel="noopener noreferrer" 
+                           class="text-brand-text/60 hover:text-brand-primary transition-colors">
+                            <i class="fab fa-instagram text-xl"></i>
+                        </a>
+                        {% endif %}
+                        {% if storefront.twitter_url %}
+                        <a href="{{ storefront.twitter_url }}" target="_blank" rel="noopener noreferrer" 
+                           class="text-brand-text/60 hover:text-brand-primary transition-colors">
+                            <i class="fab fa-twitter text-xl"></i>
+                        </a>
+                        {% endif %}
+                        {% if storefront.tiktok_url %}
+                        <a href="{{ storefront.tiktok_url }}" target="_blank" rel="noopener noreferrer" 
+                           class="text-brand-text/60 hover:text-brand-primary transition-colors">
+                            <i class="fab fa-tiktok text-xl"></i>
+                        </a>
+                        {% endif %}
+                        {% if storefront.youtube_url %}
+                        <a href="{{ storefront.youtube_url }}" target="_blank" rel="noopener noreferrer" 
+                           class="text-brand-text/60 hover:text-brand-primary transition-colors">
+                            <i class="fab fa-youtube text-xl"></i>
+                        </a>
+                        {% endif %}
+                        {% if storefront.linkedin_url %}
+                        <a href="{{ storefront.linkedin_url }}" target="_blank" rel="noopener noreferrer" 
+                           class="text-brand-text/60 hover:text-brand-primary transition-colors">
+                            <i class="fab fa-linkedin text-xl"></i>
+                        </a>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Powered by InstantIn.me -->
+                    <p class="text-xs text-brand-text/50">
+                        Powered by <a href="https://instantin.me" class="hover:text-brand-primary transition-colors">InstantIn.me</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+        {% endblock %}
+    </footer>
+
+    <!-- Mobile Navigation (if needed) -->
+    {% block mobile_nav %}{% endblock %}
+
+    <!-- Modals and Overlays -->
+    {% block modals %}
+    <!-- Share Modal -->
+    <div id="share-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+        <div class="bg-brand-bg rounded-2xl max-w-md w-full p-6 animate-slide-up">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-semibold text-brand-text">Share this page</h3>
+                <button id="close-share-modal" class="text-brand-text/50 hover:text-brand-text">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="space-y-3">
+                <button onclick="shareToTwitter()" class="w-full flex items-center space-x-3 p-3 rounded-lg bg-blue-500 text-white hover:bg-blue-600 transition-colors">
+                    <i class="fab fa-twitter"></i>
+                    <span>Share on Twitter</span>
+                </button>
+                <button onclick="shareToFacebook()" class="w-full flex items-center space-x-3 p-3 rounded-lg bg-blue-700 text-white hover:bg-blue-800 transition-colors">
+                    <i class="fab fa-facebook"></i>
+                    <span>Share on Facebook</span>
+                </button>
+                <button onclick="copyToClipboard()" class="w-full flex items-center space-x-3 p-3 rounded-lg bg-brand-surface text-brand-text hover:bg-brand-primary hover:text-white transition-colors">
+                    <i class="fas fa-copy"></i>
+                    <span>Copy Link</span>
+                </button>
+            </div>
+        </div>
+    </div>
+    {% endblock %}
+
+    <!-- Toast Notifications -->
+    <div id="toast-container" class="fixed bottom-4 right-4 z-50 space-y-2"></div>
+
+    <!-- JavaScript -->
+    <script src="/static/js/storefront.js"></script>
+    
+    <!-- Inline JavaScript for immediate functionality -->
+    <script>
+        // Basic functionality that needs to work immediately
+        document.addEventListener('DOMContentLoaded', function() {
+            // Share functionality
+            const shareButton = document.getElementById('share-button');
+            const shareModal = document.getElementById('share-modal');
+            const closeShareModal = document.getElementById('close-share-modal');
+            
+            if (shareButton && shareModal) {
+                shareButton.addEventListener('click', () => {
+                    shareModal.classList.remove('hidden');
+                    shareModal.classList.add('flex');
+                });
+            }
+            
+            if (closeShareModal && shareModal) {
+                closeShareModal.addEventListener('click', () => {
+                    shareModal.classList.add('hidden');
+                    shareModal.classList.remove('flex');
+                });
+                
+                // Close on backdrop click
+                shareModal.addEventListener('click', (e) => {
+                    if (e.target === shareModal) {
+                        shareModal.classList.add('hidden');
+                        shareModal.classList.remove('flex');
+                    }
+                });
+            }
+            
+            // Loading overlay control
+            window.showLoading = () => {
+                document.getElementById('loading-overlay').classList.remove('hidden');
+            };
+            
+            window.hideLoading = () => {
+                document.getElementById('loading-overlay').classList.add('hidden');
+            };
+            
+            // Toast notifications
+            window.showToast = (message, type = 'info') => {
+                const container = document.getElementById('toast-container');
+                const toast = document.createElement('div');
+                toast.className = `bg-${type === 'success' ? 'green' : type === 'error' ? 'red' : 'blue'}-500 text-white px-4 py-3 rounded-lg shadow-lg animate-slide-up`;
+                toast.innerHTML = `
+                    <div class="flex items-center justify-between">
+                        <span>${message}</span>
+                        <button onclick="this.parentElement.parentElement.remove()" class="ml-3">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                `;
+                container.appendChild(toast);
+                
+                // Auto remove after 5 seconds
+                setTimeout(() => {
+                    if (toast.parentElement) {
+                        toast.remove();
+                    }
+                }, 5000);
+            };
+            
+            // Share functions
+            window.shareToTwitter = () => {
+                const url = encodeURIComponent(window.location.href);
+                const text = encodeURIComponent(document.title);
+                window.open(`https://twitter.com/intent/tweet?url=${url}&text=${text}`, '_blank');
+            };
+            
+            window.shareToFacebook = () => {
+                const url = encodeURIComponent(window.location.href);
+                window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`, '_blank');
+            };
+            
+            window.copyToClipboard = () => {
+                navigator.clipboard.writeText(window.location.href).then(() => {
+                    showToast('Link copied to clipboard!', 'success');
+                    document.getElementById('share-modal').classList.add('hidden');
+                    document.getElementById('share-modal').classList.remove('flex');
+                });
+            };
+        });
+    </script>
+    
+    {% block extra_js %}{% endblock %}
+</body>
+</html> 

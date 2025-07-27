@@ -1,0 +1,396 @@
+{% extends "base.html" %}
+
+{% block title %}{{ storefront.name }}{% if storefront.tagline %} - {{ storefront.tagline }}{% endif %}{% endblock %}
+
+{% block meta_description %}{{ storefront.meta_description or storefront.bio or (storefront.name + " - Professional link-in-bio page") }}{% endblock %}
+
+{% block meta_keywords %}{{ storefront.name }}, link in bio, {{ storefront.category or 'creator' }}, social media{% if storefront.tags %}, {{ storefront.tags | join(', ') }}{% endif %}{% endblock %}
+
+{% block extra_head %}
+<!-- Storefront-specific styles -->
+<style>
+    /* Custom animations for storefront elements */
+    .stagger-fade-in > * {
+        opacity: 0;
+        transform: translateY(20px);
+        animation: fadeInUp 0.6s ease-out forwards;
+    }
+    .stagger-fade-in > *:nth-child(1) { animation-delay: 0.1s; }
+    .stagger-fade-in > *:nth-child(2) { animation-delay: 0.2s; }
+    .stagger-fade-in > *:nth-child(3) { animation-delay: 0.3s; }
+    .stagger-fade-in > *:nth-child(4) { animation-delay: 0.4s; }
+    .stagger-fade-in > *:nth-child(5) { animation-delay: 0.5s; }
+    .stagger-fade-in > *:nth-child(6) { animation-delay: 0.6s; }
+    .stagger-fade-in > *:nth-child(7) { animation-delay: 0.7s; }
+    .stagger-fade-in > *:nth-child(8) { animation-delay: 0.8s; }
+
+    @keyframes fadeInUp {
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Link hover effects */
+    .link-card {
+        transition: all 0.3s ease;
+        transform: translateY(0);
+    }
+    .link-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Profile image animation */
+    .profile-image {
+        transition: transform 0.3s ease;
+    }
+    .profile-image:hover {
+        transform: scale(1.05);
+    }
+
+    /* Social icon hover effects */
+    .social-icon {
+        transition: all 0.3s ease;
+    }
+    .social-icon:hover {
+        transform: translateY(-2px) scale(1.1);
+    }
+</style>
+{% endblock %}
+
+{% block header_class %}relative bg-transparent{% endblock %}
+
+{% block header %}
+<!-- Custom header for storefront - minimal design -->
+<div class="absolute top-4 right-4 z-10">
+    <button id="share-button" class="bg-white/10 backdrop-blur-sm text-brand-text hover:bg-brand-primary hover:text-white p-2 rounded-full transition-all duration-300 shadow-lg">
+        <i class="fas fa-share text-sm"></i>
+    </button>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="min-h-screen">
+    <!-- Cover Image Section -->
+    {% if storefront.cover_image_url %}
+    <div class="relative h-48 sm:h-64 md:h-80 overflow-hidden">
+        <img src="{{ storefront.cover_image_url }}" 
+             alt="{{ storefront.name }} cover" 
+             class="w-full h-full object-cover">
+        <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
+    </div>
+    {% endif %}
+
+    <!-- Main Content Container -->
+    <div class="max-w-md mx-auto px-4 pb-8 {% if storefront.cover_image_url %}-mt-16{% else %}pt-8{% endif %}">
+        
+        <!-- Profile Section -->
+        <div class="text-center mb-8 stagger-fade-in">
+            <!-- Avatar -->
+            <div class="mb-4 relative inline-block">
+                {% if storefront.avatar_url %}
+                <img src="{{ storefront.avatar_url }}" 
+                     alt="{{ storefront.name }}" 
+                     class="profile-image w-24 h-24 rounded-full mx-auto border-4 border-white shadow-xl object-cover">
+                {% else %}
+                <div class="profile-image w-24 h-24 rounded-full mx-auto border-4 border-white shadow-xl bg-brand-primary flex items-center justify-center">
+                    <span class="text-white font-bold text-2xl">{{ storefront.name[0].upper() }}</span>
+                </div>
+                {% endif %}
+                
+                <!-- Verification Badge (if premium) -->
+                {% if storefront.is_verified %}
+                <div class="absolute -bottom-1 -right-1 bg-brand-primary text-white rounded-full p-1 shadow-lg">
+                    <i class="fas fa-check text-xs"></i>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Name and Title -->
+            <h1 class="text-2xl sm:text-3xl font-bold text-brand-text mb-2">{{ storefront.name }}</h1>
+            
+            {% if storefront.tagline %}
+            <p class="text-brand-accent font-medium mb-3">{{ storefront.tagline }}</p>
+            {% endif %}
+
+            <!-- Bio -->
+            {% if storefront.bio %}
+            <p class="text-brand-text/80 leading-relaxed mb-4">{{ storefront.bio }}</p>
+            {% endif %}
+
+            <!-- Website Link -->
+            {% if storefront.website_url %}
+            <a href="{{ storefront.website_url }}" 
+               target="_blank" 
+               rel="noopener noreferrer"
+               class="inline-flex items-center text-brand-primary hover:text-brand-accent transition-colors">
+                <i class="fas fa-globe mr-2"></i>
+                <span class="text-sm font-medium">{{ storefront.website_url.replace('https://', '').replace('http://', '').split('/')[0] }}</span>
+                <i class="fas fa-external-link-alt ml-1 text-xs"></i>
+            </a>
+            {% endif %}
+        </div>
+
+        <!-- Social Media Links -->
+        {% if storefront.instagram_url or storefront.twitter_url or storefront.tiktok_url or storefront.youtube_url or storefront.linkedin_url %}
+        <div class="flex justify-center space-x-4 mb-8">
+            {% if storefront.instagram_url %}
+            <a href="{{ storefront.instagram_url }}" 
+               target="_blank" 
+               rel="noopener noreferrer"
+               class="social-icon bg-gradient-to-r from-purple-500 to-pink-500 text-white p-3 rounded-full shadow-lg hover:shadow-xl"
+               onclick="StorefrontJS.trackEvent('social_click', {platform: 'instagram'})">
+                <i class="fab fa-instagram text-lg"></i>
+            </a>
+            {% endif %}
+            
+            {% if storefront.twitter_url %}
+            <a href="{{ storefront.twitter_url }}" 
+               target="_blank" 
+               rel="noopener noreferrer"
+               class="social-icon bg-gradient-to-r from-blue-400 to-blue-600 text-white p-3 rounded-full shadow-lg hover:shadow-xl"
+               onclick="StorefrontJS.trackEvent('social_click', {platform: 'twitter'})">
+                <i class="fab fa-twitter text-lg"></i>
+            </a>
+            {% endif %}
+            
+            {% if storefront.tiktok_url %}
+            <a href="{{ storefront.tiktok_url }}" 
+               target="_blank" 
+               rel="noopener noreferrer"
+               class="social-icon bg-gradient-to-r from-gray-800 to-gray-900 text-white p-3 rounded-full shadow-lg hover:shadow-xl"
+               onclick="StorefrontJS.trackEvent('social_click', {platform: 'tiktok'})">
+                <i class="fab fa-tiktok text-lg"></i>
+            </a>
+            {% endif %}
+            
+            {% if storefront.youtube_url %}
+            <a href="{{ storefront.youtube_url }}" 
+               target="_blank" 
+               rel="noopener noreferrer"
+               class="social-icon bg-gradient-to-r from-red-500 to-red-600 text-white p-3 rounded-full shadow-lg hover:shadow-xl"
+               onclick="StorefrontJS.trackEvent('social_click', {platform: 'youtube'})">
+                <i class="fab fa-youtube text-lg"></i>
+            </a>
+            {% endif %}
+            
+            {% if storefront.linkedin_url %}
+            <a href="{{ storefront.linkedin_url }}" 
+               target="_blank" 
+               rel="noopener noreferrer"
+               class="social-icon bg-gradient-to-r from-blue-600 to-blue-700 text-white p-3 rounded-full shadow-lg hover:shadow-xl"
+               onclick="StorefrontJS.trackEvent('social_click', {platform: 'linkedin'})">
+                <i class="fab fa-linkedin text-lg"></i>
+            </a>
+            {% endif %}
+        </div>
+        {% endif %}
+
+        <!-- Links Section -->
+        {% if storefront.links %}
+        <div class="space-y-4 stagger-fade-in">
+            {% for link in storefront.links %}
+            <a href="{{ link.url }}" 
+               target="_blank" 
+               rel="noopener noreferrer"
+               class="link-card block w-full p-4 bg-brand-surface/50 backdrop-blur-sm rounded-2xl border border-brand-text/10 hover:border-brand-primary/50 transition-all duration-300 group"
+               onclick="StorefrontJS.trackEvent('link_click', {title: '{{ link.title }}', url: '{{ link.url }}'})">
+                
+                <div class="flex items-center space-x-4">
+                    <!-- Link Icon/Image -->
+                    {% if link.image_url %}
+                    <img src="{{ link.image_url }}" 
+                         alt="{{ link.title }}" 
+                         class="w-12 h-12 rounded-xl object-cover flex-shrink-0 shadow-md">
+                    {% else %}
+                    <div class="w-12 h-12 bg-brand-primary rounded-xl flex items-center justify-center flex-shrink-0 shadow-md group-hover:scale-110 transition-transform">
+                        <i class="fas fa-link text-white"></i>
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Link Content -->
+                    <div class="flex-1 min-w-0">
+                        <h3 class="font-semibold text-brand-text group-hover:text-brand-primary transition-colors truncate">
+                            {{ link.title }}
+                        </h3>
+                        {% if link.description %}
+                        <p class="text-sm text-brand-text/70 truncate">{{ link.description }}</p>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Arrow Icon -->
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-chevron-right text-brand-text/40 group-hover:text-brand-primary group-hover:translate-x-1 transition-all"></i>
+                    </div>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <!-- Products Section (if any) -->
+        {% if storefront.products %}
+        <div class="mt-12">
+            <h2 class="text-xl font-bold text-brand-text mb-6 text-center">Featured Products</h2>
+            <div class="grid grid-cols-2 gap-4">
+                {% for product in storefront.products[:4] %}
+                <div class="bg-brand-surface/50 backdrop-blur-sm rounded-2xl overflow-hidden border border-brand-text/10 hover:border-brand-primary/50 transition-all duration-300 group">
+                    {% if product.image_url %}
+                    <img src="{{ product.image_url }}" 
+                         alt="{{ product.name }}" 
+                         class="w-full h-32 object-cover group-hover:scale-105 transition-transform duration-300">
+                    {% endif %}
+                    <div class="p-3">
+                        <h3 class="font-semibold text-brand-text text-sm mb-1 truncate">{{ product.name }}</h3>
+                        <p class="text-brand-primary font-bold text-sm">${{ "%.2f"|format(product.price) }}</p>
+                        {% if product.description %}
+                        <p class="text-xs text-brand-text/70 mt-1 line-clamp-2">{{ product.description }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            
+            {% if storefront.products|length > 4 %}
+            <div class="text-center mt-6">
+                <a href="#" class="inline-flex items-center text-brand-primary hover:text-brand-accent font-medium">
+                    View All Products
+                    <i class="fas fa-arrow-right ml-2"></i>
+                </a>
+            </div>
+            {% endif %}
+        </div>
+        {% endif %}
+
+        <!-- Call-to-Action Section -->
+        {% if storefront.cta_text and storefront.cta_url %}
+        <div class="mt-12 text-center">
+            <a href="{{ storefront.cta_url }}" 
+               target="_blank" 
+               rel="noopener noreferrer"
+               class="inline-block bg-brand-primary hover:bg-brand-accent text-white font-semibold px-8 py-4 rounded-2xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+               onclick="StorefrontJS.trackEvent('cta_click', {text: '{{ storefront.cta_text }}'})">
+                {{ storefront.cta_text }}
+                <i class="fas fa-arrow-right ml-2"></i>
+            </a>
+        </div>
+        {% endif %}
+
+        <!-- Analytics Section (if enabled) -->
+        {% if storefront.enable_analytics %}
+        <div class="mt-16 pt-8 border-t border-brand-text/10">
+            <div class="grid grid-cols-3 gap-4 text-center">
+                <div>
+                    <div class="text-2xl font-bold text-brand-primary">{{ storefront.view_count or 0 }}</div>
+                    <div class="text-xs text-brand-text/60">Views</div>
+                </div>
+                <div>
+                    <div class="text-2xl font-bold text-brand-primary">{{ storefront.click_count or 0 }}</div>
+                    <div class="text-xs text-brand-text/60">Clicks</div>
+                </div>
+                <div>
+                    <div class="text-2xl font-bold text-brand-primary">{{ storefront.links|length if storefront.links else 0 }}</div>
+                    <div class="text-xs text-brand-text/60">Links</div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Contact Information -->
+        {% if storefront.contact_email %}
+        <div class="mt-8 text-center">
+            <a href="mailto:{{ storefront.contact_email }}" 
+               class="inline-flex items-center text-brand-text/70 hover:text-brand-primary transition-colors">
+                <i class="fas fa-envelope mr-2"></i>
+                <span class="text-sm">Contact</span>
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block footer %}
+<!-- Minimal footer for storefront -->
+<div class="bg-brand-surface/20 border-t border-brand-text/5">
+    <div class="max-w-md mx-auto px-4 py-6 text-center">
+        {% if storefront.instagram_url or storefront.twitter_url or storefront.tiktok_url or storefront.youtube_url or storefront.linkedin_url %}
+        <div class="flex justify-center space-x-3 mb-4">
+            {% if storefront.instagram_url %}
+            <a href="{{ storefront.instagram_url }}" target="_blank" rel="noopener noreferrer" 
+               class="text-brand-text/50 hover:text-brand-primary transition-colors">
+                <i class="fab fa-instagram"></i>
+            </a>
+            {% endif %}
+            {% if storefront.twitter_url %}
+            <a href="{{ storefront.twitter_url }}" target="_blank" rel="noopener noreferrer" 
+               class="text-brand-text/50 hover:text-brand-primary transition-colors">
+                <i class="fab fa-twitter"></i>
+            </a>
+            {% endif %}
+            {% if storefront.tiktok_url %}
+            <a href="{{ storefront.tiktok_url }}" target="_blank" rel="noopener noreferrer" 
+               class="text-brand-text/50 hover:text-brand-primary transition-colors">
+                <i class="fab fa-tiktok"></i>
+            </a>
+            {% endif %}
+            {% if storefront.youtube_url %}
+            <a href="{{ storefront.youtube_url }}" target="_blank" rel="noopener noreferrer" 
+               class="text-brand-text/50 hover:text-brand-primary transition-colors">
+                <i class="fab fa-youtube"></i>
+            </a>
+            {% endif %}
+            {% if storefront.linkedin_url %}
+            <a href="{{ storefront.linkedin_url }}" target="_blank" rel="noopener noreferrer" 
+               class="text-brand-text/50 hover:text-brand-primary transition-colors">
+                <i class="fab fa-linkedin"></i>
+            </a>
+            {% endif %}
+        </div>
+        {% endif %}
+        
+        <p class="text-xs text-brand-text/40">
+            Made with <a href="https://instantin.me" class="hover:text-brand-primary transition-colors">InstantIn.me</a>
+        </p>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Track page view
+    StorefrontJS.trackEvent('page_view', {
+        storefront: '{{ storefront.slug }}',
+        name: '{{ storefront.name }}'
+    });
+    
+    // Add intersection observer for analytics
+    if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const element = entry.target;
+                    if (element.classList.contains('link-card')) {
+                        StorefrontJS.trackEvent('link_view', {
+                            title: element.querySelector('h3').textContent
+                        });
+                    }
+                }
+            });
+        }, { threshold: 0.5 });
+        
+        document.querySelectorAll('.link-card').forEach(link => {
+            observer.observe(link);
+        });
+    }
+    
+    // Add scroll animations
+    const elements = document.querySelectorAll('.stagger-fade-in');
+    elements.forEach(element => {
+        element.style.opacity = '1';
+    });
+});
+</script>
+{% endblock %} 
