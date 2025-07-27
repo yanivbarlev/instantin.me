@@ -358,6 +358,9 @@
 {% endblock %}
 
 {% block extra_js %}
+<!-- Include Page Builder -->
+<script src="{{ url_for('static', path='js/page-builder.js') }}"></script>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     // Track page view
@@ -391,6 +394,10 @@ document.addEventListener('DOMContentLoaded', function() {
     elements.forEach(element => {
         element.style.opacity = '1';
     });
+    
+    // Add page builder access for development/testing
+    // You can remove this in production
+    console.log('Page Builder available! Try: window.pageBuilder.open()');
 });
 </script>
 {% endblock %} 

@@ -1,29 +1,52 @@
----
-alwaysApply: true
----
 # Task List Management
 
 Guidelines for managing task lists in markdown files to track progress on completing a PRD
 The name of thesite is instantin.me
+
 ## Task Implementation
 - **One sub-task at a time:** Do **NOT** start the next sub‑task until you ask the user for permission and they say "yes" or "y"
 - **Completion protocol:**  
   1. When you finish a **sub‑task**, immediately mark it as completed by changing `[ ]` to `[x]`.
-  2. **After each completed sub-task**, follow this sequence:
-    - **Document**: Add entry to `PROGRESS.md` explaining what was accomplished and important notes
-    - **Stage changes**: `git add .`
-    - **Commit**: Use a descriptive commit message that:
-      - Uses conventional commit format (`feat:`, `fix:`, `refactor:`, etc.)
-      - Summarizes what was accomplished in the sub-task
-      - References the specific task number
-      - **Formats the message as a single-line command using `-m` flags**, e.g.:
-
-        ```
-        git commit -m "feat: add requirements.txt with dependencies" -m "Task 1.1: Added FastAPI, SQLAlchemy, Celery and all required packages" -m "Related to instantin.me PRD"
-        ```
+  2. **Git operations strategy** (MANUAL USER-MANAGED):
+    - **For individual subtasks**: Document progress in `PROGRESS.md` only (no git operations)
+    - **For logical groups** (2-4 related subtasks OR completion of parent task):
+      - **Document**: Add comprehensive entry to `PROGRESS.md` explaining what was accomplished
+      - **Notify user**: Tell user it's time to commit and provide commit message
+      - **List files**: Specify which files were changed/added for the commit
+    - **AI will NEVER perform git operations**: User handles all `git add` and `git commit` commands manually
   3. When **all** subtasks underneath a parent task are `[x]`, mark the **parent task** as completed.
   4. **Optional**: Run relevant tests before moving to next parent task section.
 - Stop after each sub‑task and wait for the user's go‑ahead.
+
+## Git Operation Guidelines (MANUAL USER-MANAGED)
+- **AI never performs git operations**: Due to tool hanging issues, ALL git operations are handled by the user
+- **AI responsibilities**:
+  - Document progress in `PROGRESS.md` for each subtask
+  - Notify user when it's time to commit (logical groups of 2-4 subtasks or parent task completion)
+  - Provide descriptive commit messages in conventional format
+  - List specific files that were changed/added for the commit
+- **Commit message format provided by AI**:
+  ```
+  feat: [brief description]
+  
+  - [specific change 1]
+  - [specific change 2] 
+  - [specific change 3]
+  ```
+- **Progress tracking**: Always document in PROGRESS.md regardless of git status
+
+## Visual Changes Notification
+- **When implementing changes that create visual/user-facing features** (templates, UI components, frontend features, etc.):
+  1. **Immediately notify the user** that visual changes have been made
+  2. **Provide clear instructions** on how to see the changes (URLs, commands to run, etc.)
+  3. **Explain what to expect** - describe the visual features, interactions, and functionality
+  4. **Include testing steps** if the user wants to verify the functionality
+- This applies to:
+  - HTML templates and UI components
+  - CSS styling and visual enhancements  
+  - JavaScript interactive features
+  - Frontend routes and pages
+  - Any user-facing interface changes
 
 ## Task List Maintenance
 
@@ -47,3 +70,5 @@ When working with task lists, the AI must:
 4. Keep "Relevant Files" accurate and up to date.
 5. Before starting work, check which sub‑task is next.
 6. After implementing a sub‑task, update the file and then pause for user approval.
+7. **Follow visual changes notification protocol** when implementing user-facing features.
+8. **Never perform git operations** - only provide commit guidance to user when appropriate.

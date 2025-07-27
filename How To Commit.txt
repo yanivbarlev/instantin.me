@@ -1,0 +1,31 @@
+Here are the standard commands you'll use for all future commits:
+For regular commits (most common):
+git add .
+git commit -m "Your commit message describing what you changed"
+git push origin main
+
+If you only want to commit specific files:
+git add filename.py
+git add another-file.js
+git commit -m "Your commit message"
+git push origin main
+
+
+To see what files have changed before committing:
+git status
+
+To see what specific changes you made:
+git diff
+
+Example workflow:
+# Check what changed
+git status
+
+# Add all changes
+git add .
+
+# Commit with a descriptive message
+git commit -m "Add new feature X and fix bug Y"
+
+# Push to GitHub
+git push origin main

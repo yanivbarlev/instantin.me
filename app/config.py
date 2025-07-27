@@ -55,7 +55,37 @@ class Settings(BaseSettings):
     
     # AI Services Configuration
     groq_api_key: Optional[str] = None
+    groq_model: str = "llama3-8b-8192"  # Fast model for real-time responses
+    groq_max_tokens: int = 2048
+    groq_temperature: float = 0.7
+    groq_timeout: int = 30
+    
+    # Image Services Configuration  
     unsplash_api_key: Optional[str] = None
+    
+    # AI Feature Toggles
+    ai_page_builder_enabled: bool = True
+    ai_content_generation_enabled: bool = True
+    ai_migration_enabled: bool = True
+    ai_optimization_enabled: bool = True
+    
+    # AI Content Generation Limits
+    ai_daily_requests_per_user: int = 50
+    ai_bio_max_length: int = 500
+    ai_description_max_length: int = 1000
+    ai_product_description_max_length: int = 500
+    
+    # AI Page Builder Configuration
+    ai_page_builder_max_links: int = 20
+    ai_page_builder_max_products: int = 10
+    ai_page_builder_timeout: int = 60
+    
+    # AI Migration Configuration
+    ai_migration_timeout: int = 120
+    ai_migration_max_retries: int = 3
+    ai_migration_supported_platforms: List[str] = [
+        "linktree", "beacons", "bio.link", "campsite", "linktr.ee"
+    ]
     
     # Email Configuration
     smtp_host: str = "smtp.gmail.com"
@@ -120,7 +150,37 @@ class Settings(BaseSettings):
     @property
     def ai_services_configured(self) -> bool:
         """Check if AI services are properly configured"""
-        return bool(self.groq_api_key and self.unsplash_api_key)
+        return bool(self.groq_api_key)
+    
+    @property
+    def groq_configured(self) -> bool:
+        """Check if Groq API is properly configured"""
+        return bool(self.groq_api_key)
+    
+    @property
+    def unsplash_configured(self) -> bool:
+        """Check if Unsplash API is properly configured"""
+        return bool(self.unsplash_api_key)
+    
+    @property
+    def ai_page_builder_available(self) -> bool:
+        """Check if AI page builder is available"""
+        return self.groq_configured and self.ai_page_builder_enabled
+    
+    @property
+    def ai_content_generation_available(self) -> bool:
+        """Check if AI content generation is available"""
+        return self.groq_configured and self.ai_content_generation_enabled
+    
+    @property
+    def ai_migration_available(self) -> bool:
+        """Check if AI migration is available"""
+        return self.groq_configured and self.ai_migration_enabled
+    
+    @property
+    def ai_optimization_available(self) -> bool:
+        """Check if AI optimization is available"""
+        return self.groq_configured and self.ai_optimization_enabled
     
     @property
     def email_configured(self) -> bool:
@@ -176,8 +236,24 @@ def validate_configuration():
     if not settings.aws_configured:
         print("⚠️  AWS S3 not configured - file uploads will be disabled")
         
-    if not settings.ai_services_configured:
-        print("⚠️  AI services not configured - AI features will be disabled")
+    # AI Services status
+    if settings.groq_configured:
+        print(f"🤖 Groq AI configured - Model: {settings.groq_model}")
+        if settings.ai_page_builder_enabled:
+            print("  ✅ AI Page Builder enabled")
+        if settings.ai_content_generation_enabled:
+            print("  ✅ AI Content Generation enabled")
+        if settings.ai_migration_enabled:
+            print("  ✅ AI Migration enabled")
+        if settings.ai_optimization_enabled:
+            print("  ✅ AI Optimization enabled")
+    else:
+        print("⚠️  Groq API not configured - AI features will be disabled")
+    
+    if settings.unsplash_configured:
+        print("🖼️  Unsplash configured - Image suggestions available")
+    else:
+        print("ℹ️  Unsplash not configured - manual image selection only")
         
     if not settings.email_configured:
         print("⚠️  Email not configured - notifications will be disabled")
