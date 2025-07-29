@@ -60,8 +60,10 @@ class Settings(BaseSettings):
     groq_temperature: float = 0.7
     groq_timeout: int = 30
     
-    # Image Services Configuration  
+    # Image Services Configuration (Unsplash)
     unsplash_api_key: Optional[str] = None
+    unsplash_secret_key: Optional[str] = None
+    unsplash_app_id: Optional[str] = None
     
     # AI Feature Toggles
     ai_page_builder_enabled: bool = True
@@ -160,7 +162,11 @@ class Settings(BaseSettings):
     @property
     def unsplash_configured(self) -> bool:
         """Check if Unsplash API is properly configured"""
-        return bool(self.unsplash_api_key)
+        return bool(
+            self.unsplash_api_key and 
+            self.unsplash_secret_key and 
+            self.unsplash_app_id
+        )
     
     @property
     def ai_page_builder_available(self) -> bool:
@@ -253,7 +259,7 @@ def validate_configuration():
     if settings.unsplash_configured:
         print("🖼️  Unsplash configured - Image suggestions available")
     else:
-        print("ℹ️  Unsplash not configured - manual image selection only")
+        print("ℹ️  Unsplash not configured - requires UNSPLASH_API_KEY, UNSPLASH_SECRET_KEY, and UNSPLASH_APP_ID")
         
     if not settings.email_configured:
         print("⚠️  Email not configured - notifications will be disabled")
