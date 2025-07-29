@@ -67,7 +67,7 @@
   - [x] 3.10 Create migration for all models: `alembic revision --autogenerate -m "create all tables"`
   - [x] 3.11 Update `app/database.py` to import all models for proper table creation
 
-- [ ] 4.0 Storefront Creation Engine (Manual, AI, Migration)
+- [x] 4.0 Storefront Creation Engine (Manual, AI, Migration)
   - [x] 4.1 Create `app/schemas/storefront.py` with StorefrontCreate, StorefrontUpdate, StorefrontResponse Pydantic models
   - [x] 4.2 Create `app/services/storefront.py` with CRUD operations for storefront management
   - [x] 4.3 Create `app/routers/storefront.py` with endpoints: POST /storefronts, GET /storefronts/{slug}, PUT /storefronts/{id}, DELETE /storefronts/{id}
@@ -83,7 +83,7 @@
   - [x] 4.13 Create `app/routers/ai_storefront.py` with AI endpoints: POST /ai/generate/bio, POST /ai/build/storefront, GET /ai/health (enhanced beyond original ai.py scope)
   - [x] 4.14 Create drag-and-drop page builder frontend components in `app/static/js/page-builder.js` with blocks: header, product, link, contact, scheduler
   - [x] 4.15 Create theme system in `app/services/theme.py` with Light, Dark, and Creator-brand color picker presets
-  - [ ] 4.16 Implement SEO optimization in `app/utils/seo.py` with meta tags, structured data, and sitemap generation
+  - [x] 4.16 Implement SEO optimization in `app/utils/seo.py` with meta tags, structured data, and sitemap generation
 
 - [ ] 5.0 Product Management and Types Implementation
   - [ ] 5.1 Create `app/schemas/product.py` with ProductCreate, ProductUpdate, ProductResponse, and type-specific schemas
