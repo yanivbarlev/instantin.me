@@ -87,8 +87,8 @@
 
 - [ ] 5.0 Product Management and Types Implementation
   - [x] 5.1 Create `app/schemas/product.py` with ProductCreate, ProductUpdate, ProductResponse, and type-specific schemas
-  - [ ] 5.2 Create `app/services/product.py` with CRUD operations for all product types
-  - [ ] 5.3 Create `app/routers/product.py` with endpoints: POST /products, GET /products, PUT /products/{id}, DELETE /products/{id}
+  - [x] 5.2 Create `app/services/product.py` with CRUD operations for all product types
+  - [x] 5.3 Create `app/routers/product.py` with endpoints: POST /products, GET /products, PUT /products/{id}, DELETE /products/{id}
   - [ ] 5.4 Create `app/services/file_storage.py` with AWS S3 integration using boto3 for digital file uploads
   - [ ] 5.5 Create `app/models/digital_product.py` extending Product for file_url, file_size, download_limit
   - [ ] 5.6 Create `app/models/physical_product.py` extending Product for weight, dimensions, shipping_required

@@ -8,7 +8,7 @@ from datetime import datetime
 
 from app.config import settings
 from app.database import init_database, close_database_connections, database_health_check
-from app.routers import auth, oauth, storefront, ai_storefront
+from app.routers import auth, oauth, storefront, ai_storefront, product
 
 # Create FastAPI application instance
 app = FastAPI(
@@ -38,6 +38,7 @@ templates = Jinja2Templates(directory="app/templates")
 app.include_router(auth.router)
 app.include_router(oauth.router)
 app.include_router(storefront.router)
+app.include_router(product.router)
 app.include_router(ai_storefront.router)
 
 # Health check endpoint

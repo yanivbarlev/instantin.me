@@ -3347,5 +3347,138 @@ After investigating why git automation seemed to "stop working" after Task 1.10,
 
 ---
 
-## Next: Task 5.2 - Product Service Layer
-Moving to business logic implementation with CRUD operations for all product types...
+## Task 5.2 ✅ - Product Service Layer with Full CRUD Operations
+**Completed**: Created comprehensive business logic service for all 7 product types
+
+**What was done:**
+- Created `app/services/product.py` with `ProductService` class containing 15 core methods
+- Implemented complete CRUD operations: create, read, update, delete for all product types
+- Added advanced features: inventory management, product publishing, statistics, search
+- Built type-specific validation system for each of the 7 product types
+- Created comprehensive filtering and pagination system for product listing
+- Implemented ownership verification and authorization checks throughout
+- Added proper error handling with custom exceptions and transaction rollbacks
+- Included comprehensive logging for all operations and error tracking
+- Built JSON field handling for complex data (gallery_urls, tags, suggested_amounts)
+- Created automatic slug generation with uniqueness validation within storefronts
+
+**Core Service Methods:**
+- `create_product()`: Creates products with type-specific validation and ownership verification
+- `get_product_by_id()` & `get_product_by_slug()`: Retrieve products with access control
+- `update_product()`: Updates products with slug uniqueness and field validation
+- `delete_product()`: Soft/hard delete with ownership verification
+- `list_products()`: Advanced filtering, search, pagination, and sorting
+- `get_product_stats()`: Analytics and statistics aggregation
+- `reserve_inventory()` & `release_inventory()`: Real-time inventory management
+- `record_sale()`: Sales tracking and analytics
+- `publish_product()` & `unpublish_product()`: Product lifecycle management
+
+**Important Notes:**
+- **Universal Product Support**: Handles all 7 types (Digital, Physical, Service, Membership, Tip, Link, Event)
+- **Type-Specific Validation**: Each product type has appropriate business rules validation
+- **Inventory Management**: Real-time stock tracking with reservation system
+- **Ownership Security**: All operations verify user ownership through storefront relationships
+- **Transaction Safety**: Proper database rollbacks on errors with comprehensive logging
+- **JSON Field Handling**: Converts complex fields (URLs, amounts, tags) to/from JSON storage
+- **Slug Management**: Auto-generates unique URL-friendly slugs within storefront scope
+- **Analytics Ready**: Built-in sales tracking, click counting, and performance statistics
+- **Search & Filtering**: Advanced product discovery with text search and multi-field filtering
+- **Pagination Support**: Efficient large dataset handling with configurable page sizes
+- **Status Management**: Full product lifecycle from draft → active → sold out → archived
+
+**Business Logic Features:**
+- **Link Products**: Auto-increment click tracking for analytics and affiliate management
+- **Physical Products**: Weight validation warnings for shipping calculation accuracy
+- **Digital Products**: File size limits and download management preparation
+- **Memberships**: Billing interval validation and trial period support
+- **Tips**: Custom amount validation with suggested amounts management
+- **Inventory Control**: Automatic sold-out status management and stock reservations
+- **Product Publishing**: Controlled visibility with publish/unpublish workflows
+
+---
+
+## Task 5.3 ✅ - Product REST API Endpoints
+**Completed**: Created comprehensive REST API endpoints for product management with advanced features
+
+**What was done:**
+- Created `app/routers/product.py` with `router` containing 21 API endpoints
+- Implemented complete REST CRUD: POST, GET, PUT, DELETE for all product types
+- Added type-specific creation endpoints for better developer experience and validation
+- Built advanced search and filtering system with pagination
+- Created user-specific endpoints for authenticated product management
+- Implemented product lifecycle management (publish/unpublish)
+- Added inventory management endpoints for order processing
+- Integrated comprehensive authentication and authorization
+- Added proper HTTP status codes, response models, and error handling
+- Included rich API documentation with examples and descriptions
+- Registered product router in FastAPI application for immediate availability
+
+**API Endpoint Categories:**
+
+**1. Product Creation (9 endpoints):**
+- `POST /products` - Universal product creation (any type)
+- `POST /products/digital` - Digital product creation with file-specific fields
+- `POST /products/physical` - Physical product creation with shipping fields
+- `POST /products/service` - Service product creation with booking fields
+- `POST /products/membership` - Membership creation with subscription fields
+- `POST /products/link` - Link product creation for affiliate URLs
+- `POST /products/tip` - Tip product creation for donations
+- `POST /products/event` - Event product creation with attendance tracking
+
+**2. Product Retrieval (5 endpoints):**
+- `GET /products` - List products with advanced filtering and pagination
+- `GET /products/search` - Search products across all published storefronts
+- `GET /products/me` - Get authenticated user's products
+- `GET /products/stats` - Get product analytics and statistics
+- `GET /products/{product_id}` - Get specific product by ID
+
+**3. Product Management (4 endpoints):**
+- `PUT /products/{product_id}` - Update existing product
+- `DELETE /products/{product_id}` - Delete product (soft/hard delete)
+- `POST /products/{product_id}/publish` - Publish product (make active)
+- `POST /products/{product_id}/unpublish` - Unpublish product (make inactive)
+
+**4. Inventory Management (3 endpoints):**
+- `POST /products/{product_id}/reserve` - Reserve inventory for orders
+- `POST /products/{product_id}/release` - Release reserved inventory
+- `POST /products/{product_id}/sale` - Record successful sale for analytics
+
+**Important Notes:**
+- **Complete CRUD Operations**: Create, Read, Update, Delete for all 7 product types
+- **Type-Specific Endpoints**: Dedicated creation endpoints for better UX and validation
+- **Advanced Filtering**: Filter by storefront, type, status, featured, search text
+- **Comprehensive Pagination**: Configurable page sizes with metadata (total, pages)
+- **Flexible Sorting**: Sort by created_at, name, price, sold_count (asc/desc)
+- **Authentication Awareness**: Different behavior for authenticated vs public users
+- **Ownership Security**: All operations verify user ownership through storefront relationships
+- **Soft Delete Support**: Archive products while preserving analytics data
+- **Inventory Management**: Real-time stock tracking for order processing
+- **Analytics Integration**: Built-in sales tracking and performance metrics
+- **Rich Documentation**: Comprehensive API docs with examples and field descriptions
+
+**Authentication & Authorization:**
+- **Public Endpoints**: Search and view active products from published storefronts
+- **Authenticated Endpoints**: Full CRUD access to owned products, including drafts
+- **Owner-Only Operations**: Create, update, delete, publish/unpublish require ownership
+- **Internal Endpoints**: Inventory management for order processing system
+- **Flexible Access**: Same endpoint serves different data based on authentication status
+
+**Developer Experience Features:**
+- **Type-Specific Schemas**: Each product type has optimized creation schema
+- **Rich Examples**: Complete request/response examples for all endpoints
+- **Validation**: Comprehensive input validation with clear error messages
+- **Response Models**: Consistent response format with proper HTTP status codes
+- **Query Parameters**: Intuitive filtering with sensible defaults
+- **OpenAPI Integration**: Automatic API documentation generation in FastAPI
+
+**Application Integration:**
+- **Router Registration**: Properly registered in FastAPI app at `/products` prefix
+- **Service Integration**: Leverages comprehensive ProductService business logic
+- **Schema Integration**: Uses all Pydantic schemas with proper validation
+- **Exception Handling**: Integrates with custom exception system for consistent errors
+- **Database Integration**: Async SQLAlchemy integration with proper session management
+
+---
+
+## Next: Task 5.4 - AWS S3 File Storage Service
+Moving to file upload and storage implementation for digital products...
