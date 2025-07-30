@@ -355,6 +355,93 @@
         </p>
     </div>
 </div>
+
+<!-- Floating Edit Button for Page Builder -->
+<div id="edit-page-controls" class="fixed bottom-6 right-6 z-50">
+    <button 
+        id="edit-page-btn" 
+        onclick="window.pageBuilder.open()" 
+        class="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-6 py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 flex items-center gap-2 group"
+        title="Open Page Builder"
+    >
+        <svg class="w-5 h-5 group-hover:rotate-12 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+        </svg>
+        <span class="font-semibold">Edit Page</span>
+    </button>
+    
+    <!-- Secondary Controls (initially hidden) -->
+    <div id="edit-controls-menu" class="mt-3 space-y-2 opacity-0 transform translate-y-2 transition-all duration-200 pointer-events-none">
+        <button 
+            onclick="window.pageBuilder.generateContent()" 
+            class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg shadow-lg transition-all duration-200 flex items-center gap-2 w-full text-sm"
+        >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+            </svg>
+            AI Generate
+        </button>
+        
+        <button 
+            onclick="window.themeSystem?.openThemeSelector()" 
+            class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg shadow-lg transition-all duration-200 flex items-center gap-2 w-full text-sm"
+        >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zM21 5a2 2 0 00-2-2h-4a2 2 0 00-2 2v12a4 4 0 004 4h4a2 2 0 002-2V5z"/>
+            </svg>
+            Themes
+        </button>
+    </div>
+</div>
+
+<!-- Edit Controls JavaScript -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const editBtn = document.getElementById('edit-page-btn');
+    const editMenu = document.getElementById('edit-controls-menu');
+    let menuVisible = false;
+    
+    // Toggle menu on button click
+    editBtn.addEventListener('click', function(e) {
+        // Open page builder
+        if (typeof window.pageBuilder !== 'undefined') {
+            window.pageBuilder.open();
+        } else {
+            console.warn('Page builder not available');
+        }
+        
+        // Toggle secondary menu
+        menuVisible = !menuVisible;
+        if (menuVisible) {
+            editMenu.classList.remove('opacity-0', 'translate-y-2', 'pointer-events-none');
+            editMenu.classList.add('opacity-100', 'translate-y-0', 'pointer-events-auto');
+        } else {
+            editMenu.classList.add('opacity-0', 'translate-y-2', 'pointer-events-none');
+            editMenu.classList.remove('opacity-100', 'translate-y-0', 'pointer-events-auto');
+        }
+    });
+    
+    // Close menu when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!document.getElementById('edit-page-controls').contains(e.target) && menuVisible) {
+            menuVisible = false;
+            editMenu.classList.add('opacity-0', 'translate-y-2', 'pointer-events-none');
+            editMenu.classList.remove('opacity-100', 'translate-y-0', 'pointer-events-auto');
+        }
+    });
+    
+    // Add keyboard shortcut for edit mode (Ctrl/Cmd + E)
+    document.addEventListener('keydown', function(e) {
+        if ((e.ctrlKey || e.metaKey) && e.key === 'e') {
+            e.preventDefault();
+            if (typeof window.pageBuilder !== 'undefined') {
+                window.pageBuilder.open();
+            }
+        }
+    });
+});
+</script>
+
 {% endblock %}
 
 {% block extra_js %}
