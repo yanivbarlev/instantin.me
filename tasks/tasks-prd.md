@@ -99,68 +99,68 @@
   - [x] 5.11 Create file upload endpoint in `app/routers/upload.py` with POST /upload/digital-file with 5GB size limit enforcement
   - [~] 5.12 Create migration for product type tables: `alembic revision --autogenerate -m "add product types"` (SKIPPED - no separate product type tables needed)
 
-- [ ] 6.0 Payment Processing Integration (Stripe/PayPal)
-  - [ ] 6.1 Create `app/payments/__init__.py` (empty file)
-  - [ ] 6.2 Create `app/payments/stripe_client.py` with Stripe SDK initialization and configuration
-  - [ ] 6.3 Create `app/payments/paypal_client.py` with PayPal SDK initialization and configuration
-  - [ ] 6.4 Create `app/services/payment.py` with payment processing logic for both providers
-  - [ ] 6.5 Create `app/routers/payment.py` with endpoints: POST /payment/create-intent, POST /payment/confirm, POST /payment/webhook
-  - [ ] 6.6 Implement Stripe Connect Express account creation in `app/services/stripe_connect.py`
-  - [ ] 6.7 Implement PayPal Payouts API integration in `app/services/paypal_payouts.py`
-  - [ ] 6.8 Create webhook handlers for Stripe events in `app/payments/stripe_webhooks.py`
-  - [ ] 6.9 Create webhook handlers for PayPal events in `app/payments/paypal_webhooks.py`
-  - [ ] 6.10 Create payout scheduling logic in `app/services/payouts.py` with daily trigger
-  - [ ] 6.11 Create `app/models/transaction.py` for transaction logging (id, order_id, amount, fee, status, provider)
-  - [ ] 6.12 Add transaction fee calculation in `app/utils/fee_calculator.py`
-  - [ ] 6.13 Create manual review system in `app/services/fraud_review.py` for flagged orders with dashboard interface
-  - [ ] 6.14 Create refund system in `app/services/refund.py` with creator-initiated refund functionality
-  - [ ] 6.15 Create fraud review dashboard template in `app/templates/admin/fraud_review.html`
+- [ ] 6.0 Collaborative Drops System
+  - [ ] 6.1 Create `app/schemas/drop.py` with DropCreate, DropUpdate, DropResponse, DropParticipantCreate schemas
+  - [ ] 6.2 Create `app/services/drop.py` with drop creation, invitation, and management logic
+  - [ ] 6.3 Create `app/routers/drop.py` with endpoints: POST /drops, GET /drops, POST /drops/{id}/invite, PUT /drops/{id}/participants
+  - [ ] 6.4 Create email invitation system in `app/services/drop_invitations.py`
+  - [ ] 6.5 Create revenue split calculation in `app/services/revenue_split.py`
+  - [ ] 6.6 Create automatic payout distribution in `app/services/drop_payouts.py`
+  - [ ] 6.7 Create drop page template in `app/templates/drop.html`
+  - [ ] 6.8 Add drop-specific JavaScript in `app/static/js/drop.js` for countdown timers and real-time updates
+  - [ ] 6.9 Create migration for drop tables: `alembic revision --autogenerate -m "create drop tables"`
 
-- [ ] 7.0 Collaborative Drops System
-  - [ ] 7.1 Create `app/schemas/drop.py` with DropCreate, DropUpdate, DropResponse, DropParticipantCreate schemas
-  - [ ] 7.2 Create `app/services/drop.py` with drop creation, invitation, and management logic
-  - [ ] 7.3 Create `app/routers/drop.py` with endpoints: POST /drops, GET /drops, POST /drops/{id}/invite, PUT /drops/{id}/participants
-  - [ ] 7.4 Create email invitation system in `app/services/drop_invitations.py`
-  - [ ] 7.5 Create revenue split calculation in `app/services/revenue_split.py`
-  - [ ] 7.6 Create automatic payout distribution in `app/services/drop_payouts.py`
-  - [ ] 7.7 Create drop page template in `app/templates/drop.html`
-  - [ ] 7.8 Add drop-specific JavaScript in `app/static/js/drop.js` for countdown timers and real-time updates
-  - [ ] 7.9 Create migration for drop tables: `alembic revision --autogenerate -m "create drop tables"`
+- [ ] 7.0 Monthly Raffle and Background Tasks
+  - [ ] 7.1 Create `app/tasks/__init__.py` with Celery app initialization
+  - [ ] 7.2 Create `app/tasks/celery_config.py` with Redis broker configuration
+  - [ ] 7.3 Create `app/tasks/raffle_tasks.py` with monthly raffle winner selection task
+  - [ ] 7.4 Create `app/services/raffle.py` with raffle ticket tracking and winner selection logic
+  - [ ] 7.5 Create `app/tasks/payout_tasks.py` with daily payout processing task
+  - [ ] 7.6 Create raffle ticket tracking in page views in `app/services/analytics.py`
+  - [ ] 7.7 Create winner notification system in `app/services/raffle_notifications.py`
+  - [ ] 7.8 Create raffle dashboard in `app/templates/raffle.html`
+  - [ ] 7.9 Create Celery periodic task scheduler configuration
+  - [ ] 7.10 Create migration for raffle tables: `alembic revision --autogenerate -m "create raffle tables"`
 
-- [ ] 8.0 Monthly Raffle and Background Tasks
-  - [ ] 8.1 Create `app/tasks/__init__.py` with Celery app initialization
-  - [ ] 8.2 Create `app/tasks/celery_config.py` with Redis broker configuration
-  - [ ] 8.3 Create `app/tasks/raffle_tasks.py` with monthly raffle winner selection task
-  - [ ] 8.4 Create `app/services/raffle.py` with raffle ticket tracking and winner selection logic
-  - [ ] 8.5 Create `app/tasks/payout_tasks.py` with daily payout processing task
-  - [ ] 8.6 Create raffle ticket tracking in page views in `app/services/analytics.py`
-  - [ ] 8.7 Create winner notification system in `app/services/raffle_notifications.py`
-  - [ ] 8.8 Create raffle dashboard in `app/templates/raffle.html`
-  - [ ] 8.9 Create Celery periodic task scheduler configuration
-  - [ ] 8.10 Create migration for raffle tables: `alembic revision --autogenerate -m "create raffle tables"`
+- [ ] 8.0 Analytics Dashboard and Tracking
+  - [ ] 8.1 Create `app/analytics/__init__.py` (empty file)
+  - [ ] 8.2 Create `app/analytics/tracker.py` with page view, product view, and conversion tracking
+  - [ ] 8.3 Create `app/services/analytics.py` with data aggregation for page views, product views, sales, conversion rate metrics calculation
+  - [ ] 8.4 Create `app/routers/analytics.py` with endpoints: GET /analytics/dashboard, GET /analytics/traffic, GET /analytics/sales
+  - [ ] 8.5 Create `app/schemas/analytics.py` with analytics response models
+  - [ ] 8.6 Create analytics dashboard template in `app/templates/dashboard.html`
+  - [ ] 8.7 Create real-time dashboard updates with WebSocket in `app/routers/websocket.py`
+  - [ ] 8.8 Create Chart.js integration in `app/static/js/charts.js` for data visualization
+  - [ ] 8.9 Implement UTM parameter tracking in `app/utils/utm_tracker.py`
+  - [ ] 8.10 Create data export functionality in `app/services/data_export.py`
 
-- [ ] 9.0 Analytics Dashboard and Tracking
-  - [ ] 9.1 Create `app/analytics/__init__.py` (empty file)
-  - [ ] 9.2 Create `app/analytics/tracker.py` with page view, product view, and conversion tracking
-  - [ ] 9.3 Create `app/services/analytics.py` with data aggregation for page views, product views, sales, conversion rate metrics calculation
-  - [ ] 9.4 Create `app/routers/analytics.py` with endpoints: GET /analytics/dashboard, GET /analytics/traffic, GET /analytics/sales
-  - [ ] 9.5 Create `app/schemas/analytics.py` with analytics response models
-  - [ ] 9.6 Create analytics dashboard template in `app/templates/dashboard.html`
-  - [ ] 9.7 Create real-time dashboard updates with WebSocket in `app/routers/websocket.py`
-  - [ ] 9.8 Create Chart.js integration in `app/static/js/charts.js` for data visualization
-  - [ ] 9.9 Implement UTM parameter tracking in `app/utils/utm_tracker.py`
-  - [ ] 9.10 Create data export functionality in `app/services/data_export.py`
+- [ ] 9.0 Security, Compliance, and Performance Optimization
+  - [ ] 9.1 Create `app/middleware/security.py` with rate limiting, CORS, and security headers
+  - [ ] 9.2 Implement GDPR compliance in `app/services/gdpr.py` with data export and deletion
+  - [ ] 9.3 Create fraud detection integration with Stripe Radar in `app/services/fraud_detection.py`
+  - [ ] 9.4 Implement caching layer with Redis in `app/utils/cache.py`
+  - [ ] 9.5 Create performance monitoring in `app/middleware/performance.py`
+  - [ ] 9.6 Add request logging and error tracking in `app/utils/logging.py`
+  - [ ] 9.7 Create database query optimization and indexing in migration files
+  - [ ] 9.8 Implement input validation and sanitization in all schemas
+  - [ ] 9.9 Create comprehensive test suite structure in `tests/` directory
+  - [ ] 9.10 Create PWA (Progressive Web App) configuration with service worker and manifest in `app/static/pwa/`
+  - [ ] 9.11 Create performance optimization for 1-second median render time with CDN configuration
+  - [ ] 9.12 Create deployment configuration for PythonAnywhere in `deployment/` directory
 
-- [ ] 10.0 Security, Compliance, and Performance Optimization
-  - [ ] 10.1 Create `app/middleware/security.py` with rate limiting, CORS, and security headers
-  - [ ] 10.2 Implement GDPR compliance in `app/services/gdpr.py` with data export and deletion
-  - [ ] 10.3 Create fraud detection integration with Stripe Radar in `app/services/fraud_detection.py`
-  - [ ] 10.4 Implement caching layer with Redis in `app/utils/cache.py`
-  - [ ] 10.5 Create performance monitoring in `app/middleware/performance.py`
-  - [ ] 10.6 Add request logging and error tracking in `app/utils/logging.py`
-  - [ ] 10.7 Create database query optimization and indexing in migration files
-  - [ ] 10.8 Implement input validation and sanitization in all schemas
-  - [ ] 10.9 Create comprehensive test suite structure in `tests/` directory
-  - [ ] 10.10 Create PWA (Progressive Web App) configuration with service worker and manifest in `app/static/pwa/`
-  - [ ] 10.11 Create performance optimization for 1-second median render time with CDN configuration
-  - [ ] 10.12 Create deployment configuration for PythonAnywhere in `deployment/` directory 
+- [ ] 10.0 Payment Processing Integration (Stripe/PayPal)
+  - [ ] 10.1 Create `app/payments/__init__.py` (empty file)
+  - [ ] 10.2 Create `app/payments/stripe_client.py` with Stripe SDK initialization and configuration
+  - [ ] 10.3 Create `app/payments/paypal_client.py` with PayPal SDK initialization and configuration
+  - [ ] 10.4 Create `app/services/payment.py` with payment processing logic for both providers
+  - [ ] 10.5 Create `app/routers/payment.py` with endpoints: POST /payment/create-intent, POST /payment/confirm, POST /payment/webhook
+  - [ ] 10.6 Implement Stripe Connect Express account creation in `app/services/stripe_connect.py`
+  - [ ] 10.7 Implement PayPal Payouts API integration in `app/services/paypal_payouts.py`
+  - [ ] 10.8 Create webhook handlers for Stripe events in `app/payments/stripe_webhooks.py`
+  - [ ] 10.9 Create webhook handlers for PayPal events in `app/payments/paypal_webhooks.py`
+  - [ ] 10.10 Create payout scheduling logic in `app/services/payouts.py` with daily trigger
+  - [ ] 10.11 Create `app/models/transaction.py` for transaction logging (id, order_id, amount, fee, status, provider)
+  - [ ] 10.12 Add transaction fee calculation in `app/utils/fee_calculator.py`
+  - [ ] 10.13 Create manual review system in `app/services/fraud_review.py` for flagged orders with dashboard interface
+  - [ ] 10.14 Create refund system in `app/services/refund.py` with creator-initiated refund functionality
+  - [ ] 10.15 Create fraud review dashboard template in `app/templates/admin/fraud_review.html` 

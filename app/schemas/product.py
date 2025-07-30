@@ -145,7 +145,7 @@ class ProductCreate(ProductBaseSchema):
     storefront_id: uuid.UUID = Field(..., description="ID of the storefront this product belongs to")
 
     class Config:
-        schema_extra = {
+        json_schema_extra = {
             "example": {
                 "storefront_id": "550e8400-e29b-41d4-a716-446655440000",
                 "name": "Premium Digital Course",
@@ -175,7 +175,7 @@ class DigitalProductCreate(ProductCreate, DigitalProductFields):
         return v
 
     class Config:
-        schema_extra = {
+        json_schema_extra = {
             "example": {
                 "storefront_id": "550e8400-e29b-41d4-a716-446655440000",
                 "name": "Premium Digital Course",
@@ -201,7 +201,7 @@ class PhysicalProductCreate(ProductCreate, PhysicalProductFields):
         return v
 
     class Config:
-        schema_extra = {
+        json_schema_extra = {
             "example": {
                 "storefront_id": "550e8400-e29b-41d4-a716-446655440000",
                 "name": "Premium T-Shirt",
@@ -227,7 +227,7 @@ class ServiceProductCreate(ProductCreate, ServiceProductFields):
         return v
 
     class Config:
-        schema_extra = {
+        json_schema_extra = {
             "example": {
                 "storefront_id": "550e8400-e29b-41d4-a716-446655440000",
                 "name": "1-on-1 Consultation",
@@ -252,7 +252,7 @@ class MembershipProductCreate(ProductCreate, MembershipProductFields):
         return v
 
     class Config:
-        schema_extra = {
+        json_schema_extra = {
             "example": {
                 "storefront_id": "550e8400-e29b-41d4-a716-446655440000",
                 "name": "Premium Membership",
@@ -277,7 +277,7 @@ class LinkProductCreate(ProductCreate, LinkProductFields):
         return v
 
     class Config:
-        schema_extra = {
+        json_schema_extra = {
             "example": {
                 "storefront_id": "550e8400-e29b-41d4-a716-446655440000",
                 "name": "Recommended Book",
@@ -301,7 +301,7 @@ class TipProductCreate(ProductCreate, TipProductFields):
         return v
 
     class Config:
-        schema_extra = {
+        json_schema_extra = {
             "example": {
                 "storefront_id": "550e8400-e29b-41d4-a716-446655440000",
                 "name": "Buy me a coffee",
@@ -326,7 +326,7 @@ class EventProductCreate(ProductCreate, ServiceProductFields):
         return v
 
     class Config:
-        schema_extra = {
+        json_schema_extra = {
             "example": {
                 "storefront_id": "550e8400-e29b-41d4-a716-446655440000",
                 "name": "Workshop: Building APIs",
@@ -405,7 +405,7 @@ class ProductUpdate(BaseModel):
         return v
 
     class Config:
-        schema_extra = {
+        json_schema_extra = {
             "example": {
                 "name": "Updated Product Name",
                 "price": 79.99,
@@ -458,8 +458,8 @@ class ProductResponse(ProductBaseSchema):
     minimum_amount: Optional[Decimal]
 
     class Config:
-        orm_mode = True
-        schema_extra = {
+        from_attributes = True
+        json_schema_extra = {
             "example": {
                 "id": "550e8400-e29b-41d4-a716-446655440000",
                 "storefront_id": "660e8400-e29b-41d4-a716-446655440001",
@@ -486,7 +486,7 @@ class ProductListResponse(BaseModel):
     total_pages: int
 
     class Config:
-        schema_extra = {
+        json_schema_extra = {
             "example": {
                 "products": [],
                 "total": 25,
@@ -508,7 +508,7 @@ class ProductStatsResponse(BaseModel):
     top_selling_products: List[ProductResponse]
 
     class Config:
-        schema_extra = {
+        json_schema_extra = {
             "example": {
                 "total_products": 15,
                 "active_products": 12,

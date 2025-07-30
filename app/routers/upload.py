@@ -8,14 +8,20 @@ from io import BytesIO
 from app.database import get_async_session
 from app.auth.dependencies import get_current_user
 from app.models.user import User
-from app.services.file_storage import (
-    get_file_storage_service, 
-    FileStorageService,
-    FileStorageError,
-    FileUploadError,
-    FileSizeError,
-    FileTypeError
-)
+from app.config import settings
+try:
+    from app.services.file_storage import (
+        get_file_storage_service, 
+        FileStorageService,
+        FileStorageError,
+        FileUploadError,
+        FileSizeError,
+        FileTypeError
+    )
+    FILE_STORAGE_AVAILABLE = True
+except Exception as e:
+    FILE_STORAGE_AVAILABLE = False
+    print(f"⚠️  File storage not available: {e}")
 from app.services.product import ProductService
 from app.utils.exceptions import (
     ProductNotFoundError,
@@ -25,6 +31,20 @@ from app.utils.exceptions import (
 
 # Initialize router
 router = APIRouter(prefix="/upload", tags=["file-upload"])
+
+
+def check_file_storage_available():
+    """Check if file storage is available and raise appropriate error if not"""
+    if not FILE_STORAGE_AVAILABLE:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="File storage service is not available - AWS S3 not configured"
+        )
+    if not settings.aws_configured:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="File storage service is not available - AWS S3 credentials not configured"
+        )
 
 
 @router.post(
@@ -65,6 +85,9 @@ async def upload_digital_file(
     - File can be associated with digital products
     """
     try:
+        # Check if file storage is available
+        check_file_storage_available()
+        
         # Validate storefront ownership
         await _validate_storefront_ownership(db, storefront_id, current_user.id)
         
@@ -191,6 +214,9 @@ async def upload_multiple_files(
     - Array of upload results with success/failure status for each file
     """
     try:
+        # Check if file storage is available
+        check_file_storage_available()
+        
         # Validate request limits
         if len(files) > 10:
             raise HTTPException(
@@ -304,6 +330,9 @@ async def list_uploaded_files(
     - List of file metadata including URLs and properties
     """
     try:
+        # Check if file storage is available
+        check_file_storage_available()
+        
         # Validate limit
         if limit > 100:
             limit = 100
@@ -378,6 +407,9 @@ async def get_storage_usage(
     - Storage limit information
     """
     try:
+        # Check if file storage is available
+        check_file_storage_available()
+        
         usage_stats = await file_storage.calculate_storage_usage(current_user.id)
         
         return JSONResponse(
@@ -419,6 +451,9 @@ async def delete_uploaded_file(
     - Success confirmation or error details
     """
     try:
+        # Check if file storage is available
+        check_file_storage_available()
+        
         # Validate file ownership by checking if it's in user's directory
         if not file_key.startswith(f"users/{current_user.id}/"):
             raise HTTPException(
@@ -485,6 +520,9 @@ async def generate_download_url(
     - Pre-signed download URL with expiration info
     """
     try:
+        # Check if file storage is available
+        check_file_storage_available()
+        
         # Validate file ownership
         if not file_key.startswith(f"users/{current_user.id}/"):
             raise HTTPException(

@@ -148,26 +148,52 @@ class FileStorageService:
     }
 
     def __init__(self):
-        """Initialize S3 client and validate configuration"""
+        """Initialize S3 client configuration (connection validation deferred)"""
         if not settings.aws_configured:
             raise FileStorageError("AWS S3 is not properly configured")
         
-        try:
-            self.s3_client = boto3.client(
-                's3',
-                aws_access_key_id=settings.aws_access_key_id,
-                aws_secret_access_key=settings.aws_secret_access_key,
-                region_name=settings.aws_region
-            )
-            self.bucket_name = settings.aws_s3_bucket
+        self.bucket_name = settings.aws_s3_bucket
+        self.region = settings.aws_region
+        self._s3_client = None
+        self._s3_validated = False
+        
+        logger.info(f"🔧 FileStorageService initialized (S3 validation deferred)")
+    
+    @property
+    def s3_client(self):
+        """
+        Lazy initialization of S3 client with validation
+        
+        Returns:
+            boto3.client: S3 client instance
             
-            # Test connection
-            self.s3_client.head_bucket(Bucket=self.bucket_name)
-            logger.info(f"✅ S3 client initialized successfully for bucket: {self.bucket_name}")
-            
-        except Exception as e:
-            logger.error(f"❌ Failed to initialize S3 client: {e}")
-            raise FileStorageError(f"Failed to initialize S3 client: {e}")
+        Raises:
+            FileStorageError: If S3 client cannot be initialized or bucket is inaccessible
+        """
+        if self._s3_client is None:
+            try:
+                self._s3_client = boto3.client(
+                    's3',
+                    aws_access_key_id=settings.aws_access_key_id,
+                    aws_secret_access_key=settings.aws_secret_access_key,
+                    region_name=self.region
+                )
+                logger.info(f"✅ S3 client initialized for region '{self.region}'")
+            except Exception as e:
+                logger.error(f"❌ Failed to initialize S3 client: {e}")
+                raise FileStorageError(f"Failed to initialize S3 client: {e}")
+        
+        # Validate bucket access on first use
+        if not self._s3_validated:
+            try:
+                self._s3_client.head_bucket(Bucket=self.bucket_name)
+                self._s3_validated = True
+                logger.info(f"✅ S3 bucket '{self.bucket_name}' accessible")
+            except Exception as e:
+                logger.error(f"❌ S3 bucket '{self.bucket_name}' not accessible: {e}")
+                raise FileStorageError(f"S3 bucket '{self.bucket_name}' not accessible: {e}")
+        
+        return self._s3_client
 
     async def upload_file(
         self,
@@ -609,20 +635,29 @@ class FileStorageService:
             }
 
 
-# Global instance for dependency injection
-file_storage_service = FileStorageService() if settings.aws_configured else None
+# Global instance for dependency injection (lazy initialization)
+_file_storage_service = None
 
 
 def get_file_storage_service() -> FileStorageService:
     """
-    Dependency injection function for file storage service
+    Dependency injection function for file storage service with lazy initialization
     
     Returns:
         FileStorageService instance
         
     Raises:
-        FileStorageError: If service is not available
+        FileStorageError: If service is not available or cannot be initialized
     """
-    if not file_storage_service:
+    global _file_storage_service
+    
+    if not settings.aws_configured:
         raise FileStorageError("File storage service is not available - AWS S3 not configured")
-    return file_storage_service
+    
+    if _file_storage_service is None:
+        try:
+            _file_storage_service = FileStorageService()
+        except Exception as e:
+            raise FileStorageError(f"Failed to initialize file storage service: {e}")
+    
+    return _file_storage_service

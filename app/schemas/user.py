@@ -59,7 +59,7 @@ class UserCreate(BaseModel):
         return v
 
     class Config:
-        schema_extra = {
+        json_schema_extra = {
             "example": {
                 "email": "user@example.com",
                 "password": "SecurePass123",
@@ -78,7 +78,7 @@ class UserLogin(BaseModel):
     password: str = Field(..., description="User's password")
     
     class Config:
-        schema_extra = {
+        json_schema_extra = {
             "example": {
                 "email": "user@example.com",
                 "password": "SecurePass123"
@@ -117,7 +117,7 @@ class UserResponse(BaseModel):
     
     class Config:
         from_attributes = True  # SQLAlchemy 2.0 compatibility
-        schema_extra = {
+        json_schema_extra = {
             "example": {
                 "id": 1,
                 "email": "user@example.com",
@@ -185,7 +185,7 @@ class UserUpdate(BaseModel):
         return v
 
     class Config:
-        schema_extra = {
+        json_schema_extra = {
             "example": {
                 "first_name": "John",
                 "last_name": "Smith",
@@ -228,7 +228,7 @@ class UserProfile(BaseModel):
 
     class Config:
         from_attributes = True
-        schema_extra = {
+        json_schema_extra = {
             "example": {
                 "id": 1,
                 "email": "user@example.com",
@@ -264,7 +264,7 @@ class TokenResponse(BaseModel):
     user: UserResponse = Field(..., description="User information")
     
     class Config:
-        schema_extra = {
+        json_schema_extra = {
             "example": {
                 "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
                 "token_type": "bearer",
@@ -290,7 +290,7 @@ class EmailVerificationRequest(BaseModel):
     token: str = Field(..., description="Email verification token")
     
     class Config:
-        schema_extra = {
+        json_schema_extra = {
             "example": {
                 "token": "abc123def456ghi789"
             }
@@ -305,7 +305,7 @@ class PasswordResetRequest(BaseModel):
     email: EmailStr = Field(..., description="User's email address")
     
     class Config:
-        schema_extra = {
+        json_schema_extra = {
             "example": {
                 "email": "user@example.com"
             }
@@ -339,7 +339,7 @@ class PasswordResetConfirm(BaseModel):
         return v
     
     class Config:
-        schema_extra = {
+        json_schema_extra = {
             "example": {
                 "token": "reset123token456",
                 "new_password": "NewSecurePass123"
